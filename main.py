@@ -1,21 +1,23 @@
-import streamlit.web.bootstrap as bootstrap
 import os
 import sys
 import webbrowser
+import subprocess
 
 def main():
     script_path = os.path.abspath("Apps/app.py")
-    sys.argv = [
-        "streamlit",
-        "run",
-        script_path,
+    url = "http://localhost:8501"
+
+    # buka browser dulu
+    webbrowser.open(url)
+
+    # jalankan Streamlit melalui subprocess
+    subprocess.run([
+        "streamlit", "run", script_path,
         "--server.headless=true",
         "--server.port=8501",
         "--browser.serverAddress=localhost",
         "--server.fileWatcherType=none"
-    ]
-    bootstrap.run(script_path, False, [], {})
-    webbrowser.open("http://localhost:8501")
+    ])
 
 if __name__ == "__main__":
     main()
