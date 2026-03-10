@@ -91,7 +91,7 @@ def proses_etl_l1(file):
             var_name='shift_category',                         # Name for the new category column
             value_name='tangki_value'                           # Name for the numeric values column
             )
-        df_melted_tangki['tangki_value'] = df_melted_tangki['tangki_value'].fillna(0)
+        df_melted_tangki['tangki_value'] = df_melted_tangki['tangki_value'].fillna('-')
         df_melted_tangki['shift_category'] = df_melted_tangki['shift_category'].str.replace('tangki_shift', 'Shift ')
 
         df_finalize = df_melted_prod.merge(df_melted_downtime, on=['section','activity','product', 'production_dates','shift_category'])
@@ -113,7 +113,6 @@ def proses_etl_l1(file):
         st.write("Preview Data Summary Report L1 Oleic :", shift_summary)
 #
     return df_final
-
 
 def proses_etl_fatty_acid(file):
     df_metadata = pd.ExcelFile(file)
@@ -220,12 +219,13 @@ def proses_etl_fatty_acid(file):
             var_name='shift_category',                         # Name for the new category column
             value_name='tangki_value'                           # Name for the numeric values column
             )
-        df_melted_tangki['tangki_value'] = df_melted_tangki['tangki_value'].fillna(0)
+        df_melted_tangki['tangki_value'] = df_melted_tangki['tangki_value'].fillna('-')
         df_melted_tangki['shift_category'] = df_melted_tangki['shift_category'].str.replace('tangki_shift', 'Shift ')
 
 
         df_result = df_melted_prod.merge(df_melted_downtime, on=['section','activity','product', 'production_dates','shift_category'])
         df_result= df_result.merge(df_melted_tangki, on=['section','activity','product', 'production_dates','shift_category'])
+        df_result['section'] = df_result['section'].str.replace(".0","")
 
         df_canvas.append(df_result)
     
@@ -286,7 +286,7 @@ if 'perulangan_changed' not in st.session_state:
 # 1. Pilih Jenis File
 tipe_file = st.selectbox(
     "Pilih Jenis File Excel:",
-    ["Oleic Acid", "Fatty Alcohol", "Fatty Acid"]
+    ["Oleic Acid", "Fatty Acid"]
 )
 # Dataframe untuk pilihan bulan dan tahun
 
