@@ -34,5 +34,9 @@ DROP CONSTRAINT excel_report_fattyacid_activity_key;
 
 silahkan membuat docker container dengan cara 
 
-"docker build -t excel-uploader-streamlit ."dp
+docker build -t excel-uploader .
+docker run -d -p 8501:8501 --name excel-app excel-uploader
 
+docker network create my_network
+docker network connect my_network excel-app  
+docker network connect my_network posgrest-ku
