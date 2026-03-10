@@ -315,7 +315,7 @@ tanggal_list = df_tanggal['second column'].tolist()
 tanggal_index = tanggal_list.index(default_tanggal)
 
 left_column, center_column, right_column = st.columns(3)
-# You can use a column just like st.sidebar:
+
 with left_column:
     bulan = st.selectbox(
     'Silahkan Pilih Bulan Sesuai File Anda:',
@@ -346,7 +346,7 @@ with right2_column:
     uploaded_file = st.file_uploader("Pilih file Excel anda, dan pastikan file sudah sesuai dengan kategori dan format yang diminta", type=["xlsx", "xls", "xlsm"])
 
 with left1_column:
-        # Add selectbox with Yes/No options for perulangan input
+        # Menambahkan opsi perulangan untuk upload data beberapa hari sekaligus
     show_perulangan = st.selectbox(
         'Masukkan jumlah hari data yang ingin diupload?',
         ['Tidak', 'Ya']
@@ -378,17 +378,13 @@ if uploaded_file is not None:
         if st.session_state.get('perulangan_changed'):
             try:
                 # Baca file Excel
-                baca_file(uploaded_file) 
+                df_hasil = baca_file(uploaded_file)
             except:
                 st.error(f"Sepertinya Anda Salah memilih file atau format file tidak sesuai, silahkan cek kembali.")
                 df_hasil = None
     else:
         perulangan = 1
-        if perulangan == 1:
-            rentang_update = pd.to_datetime(tanggal + ' ' + bulan + ' ' + tahun, format='%d %b %Y')
-        else:
-            rentang_update = pd.to_datetime(tanggal + ' ' + bulan + ' ' + tahun, format='%d %b %Y')-timedelta(days=perulangan)
-        # Proceed directly to read file Excel without perulangan
+        rentang_update = pd.to_datetime(tanggal + ' ' + bulan + ' ' + tahun, format='%d %b %Y')
         try:
             # Baca file Excel
             df_hasil = baca_file(uploaded_file)
@@ -402,8 +398,6 @@ if uploaded_file is not None:
             try:
                 nama_tabel = destination_table(tipe_file)
                 
-                # Push data (misal nama tabel sesuai tipe file)
-                # nama_tabel = tipe_file.split()[1].lower()
                 try:
                     house_keeping()
                     df_hasil['upload_timestamp'] = datetime.now()
@@ -412,6 +406,5 @@ if uploaded_file is not None:
                 except Exception as e:
                     st.error(f"Terjadi kesalahan saat push data: {e}")
                 
-                # st.success(f"Berhasil! Data telah masuk ke tabel: {nama_tabel}")
             except Exception as e:
                 st.error(f"Terjadi kesalahan saat push data: {e}")
