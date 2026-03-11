@@ -5,10 +5,10 @@ import subprocess
 
 def main():
     script_path = os.path.abspath("Apps/app.py")
-    # url = "http://localhost:8502"
+    url = "http://localhost:8502"
 
-    # # buka browser dulu
-    # webbrowser.open(url)
+    # buka browser dulu
+    webbrowser.open(url)
 
     # jalankan Streamlit melalui subprocess
     subprocess.run([
